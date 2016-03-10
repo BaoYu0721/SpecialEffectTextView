@@ -1,1 +1,3 @@
 # SpecialEffectTextView
+android中一个带各种特效的文本显示，这个是利用TCP从socket中得到一个数据，然后直接在界面上用特效刷新出来。
+几个点：Android里面用UDP接收短消息的丢包率非常高，用TCP比较好；如果用循环队列由于java对象的相互引用，导致他不能自动被release掉，运行久了会出现栈溢出，我用了更好的方法。
