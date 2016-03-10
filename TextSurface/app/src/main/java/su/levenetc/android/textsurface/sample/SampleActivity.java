@@ -31,16 +31,16 @@ import su.levenetc.android.textsurface.sample.checks.CookieThumperSample;
 public class SampleActivity extends AppCompatActivity {
 
 	private TextSurface textSurface;
-    private int count = 0;
     private CookieThumperSample sample;
     private ServerSocket serverSocket;
+    private String[] time_history = {" ", " ", " ", " ", " ", " "};
+    private int his_len = 6;
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.sample_activity);
 		textSurface = (TextSurface) findViewById(R.id.text_surface);
-        sample = new CookieThumperSample(getAssets());
 
 		textSurface.postDelayed(new Runnable() {
             @Override
@@ -48,6 +48,9 @@ public class SampleActivity extends AppCompatActivity {
                 //show();
             }
         }, 1000);
+        // Debug.ENABLED = true;
+        textSurface.reset();
+        sample = new CookieThumperSample(getAssets(), textSurface);
 
         /*new Thread(new Runnable() {
             @Override
@@ -112,12 +115,16 @@ public class SampleActivity extends AppCompatActivity {
                                             return;
                                         String[] tmp2 = tmp1[0].split(" ");
                                         String[] tmp3 = tmp1[2].split(" ");
-                                        final String time = tmp2[tmp2.length - 1] + "时" + tmp1[1] + "分" + tmp3[0] + "秒";
+                                        String time = tmp2[tmp2.length - 1] + "时" + tmp1[1] + "分" + tmp3[0] + "秒";
                                         // Log.e("fuck", time);
+                                        for (int i = 0; i < his_len - 1; i++) {
+                                            time_history[i] = time_history[i + 1];
+                                        }
+                                        time_history[his_len - 1] = time + "有人在屋内运动";
                                         SampleActivity.this.runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                sample.refreshUI(textSurface, time + "有人在屋内运动");
+                                                sample.refresh(time_history);
                                             }
                                         });
                                     }
